@@ -4,11 +4,12 @@ export default {
     return {
       ok: '',
       error: '',
+      errorPush: '',
       userName: '',
       userFamily: '',
       userEmail: '',
       userPass: '',
-      users: ''
+      users: []
     }
   },
 
@@ -33,16 +34,27 @@ export default {
       } 
       this.error = '';
       this.ok = 'Успех';
+    },
+
+    showUser() {
+      if (this.ok == '') {
+        alert('Создайте пользователя');
+        return
+      }
+      this.errorPush = '';
+      this.users.push ({
+        name: this.userName,
+        family: this.userFamily,
+        email: this.userEmail,
+        pass: this.userPass
+      })
     }
- 
   }
 }
 </script>
 
 <template>
-  <div id="center">
-    
-
+  <div class="center">
     <h3>
   <i>Регистрация</i>
 </h3>
@@ -51,12 +63,20 @@ export default {
 <input type="email" placeholder="Email" className="block" v-model="userEmail">
 <input type="password" placeholder="Пароль" className="block" v-model="userPass">
 <button @click="makeUser()">Создать аккаунт</button>
-
 <p className="error">{{ error }}</p>
-<p className="ok">{{ ok }}</p>
-
+<p className="ok">{{ ok }}</p>  
   </div>
+  <button type="button" @click="showUser()">push</button>
 
+  <div class="blockCenter">
+    <div class="blockCenter" v-for="(item, index) in users" :key='index'>
+      <div class="userShow">
+        <h3>{{ item.name }}</h3>
+        <h4>{{ item.family }}</h4>
+        <h4>{{ item.email }}: {{ item.pass }}</h4>
+      </div>
+    </div>
+  </div>
 
 
 
@@ -73,11 +93,12 @@ export default {
   margin: 20px auto;
 }
 
-#center {
+.center {
   text-align: center;
 }
 
 button {
+  display: block;
   border: none;
   background-color: white;
   margin: 20px auto;
@@ -102,6 +123,20 @@ h3 {
   font-family: "Open Sans";
 }
 p {
+  margin: 10px auto;
+}
+
+.userShow {
+  border-radius: 20px;
+  width: 400px;
+  border: 2px dashed black;
+  background-color: rgb(226, 226, 226);
+  background-clip: padding-box;
+  padding: 0px 20px;
+  box-sizing: border-box;
+  margin: 10px auto;
+}
+.blockCenter {
   margin: 10px auto;
 }
 </style>
