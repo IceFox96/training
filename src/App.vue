@@ -1,88 +1,39 @@
 <script setup>
-// export default {
-//   data () {
-//     return {
-//       ok: '',
-//       error: '',
-//       errorPush: '',
-//       userName: '',
-//       userFamily: '',
-//       userEmail: '',
-//       userPass: '',
-//       users: []
-//     }
-//   },
 
-//   methods: {
-//     makeUser() {
-//       if (this.userName == '') {
-//         this.error = 'Нет Имени';
-//      this.ok = '';   
-//         return
-//       } else if (this.userFamily == '') {
-//         this.error = 'Нет Фамилии';
-//         this.ok = '';
-//         return
-//       } else if (this.userEmail == '') {
-//         this.error = 'Нет Email';
-//         this.ok = '';
-//         return
-//       } else  if(this.userPass == '') {
-//         this.error = 'Нет пароля';
-//         this.ok = '';
-//         return
-//       } 
-//       this.error = '';
-//       this.ok = 'Успех';
-//     },
+import {computed, ref} from 'vue'
 
-//     showUser() {
-//       if (this.ok == '') {
-//         alert('Создайте пользователя');
-//         return
-//       }
-//       this.errorPush = '';
-//       this.users.push ({
-//         name: this.userName,
-//         family: this.userFamily,
-//         email: this.userEmail,
-//         pass: this.userPass
-//       })
-//     }
-//   }
-// }
-import {ref} from 'vue'
+const errorPush = ref('');
+const userName = ref('');
+const userFamily = ref('');
+const userEmail = ref('');
+const userPass = ref('');
+const users = ref([]);
+const message = ref('');
 
-let ok = ref('');
-let error = ref('');
-let errorPush = ref('');
-let userName = ref('');
-let userFamily = ref('');
-let userEmail = ref('');
-let userPass = ref('');
-let users = ref([]);
+const error = computed(() => {
+  switch ('') {
+    case userName.value: 
+    return 'Нет имени';
+    case userFamily.value:
+      return 'Нет фамилии';
+    case userEmail.value:
+      return 'Нет Email'
+    case userPass.value:
+      return 'Нет пароля'
+    default: 
+    return '';
+  }
+})
+
+const ok = computed(() => (error.value == '' ? 'Успех' : '' ));
 
 function makeUser() {
-      if (userName.value == '') {
-        error.value = 'Нет Имени';
-         ok.value = '';   
-        return
-      } else if (userFamily.value == '') {
-        error.value = 'Нет Фамилии';
-        ok.value = '';
-        return
-      } else if (userEmail.value == '') {
-        error.value = 'Нет Email';
-        ok.value = '';
-        return
-      } else  if(userPass.value == '') {
-        error.value = 'Нет пароля';
-        ok.value = '';
-        return
-      } 
-      error.value = '';
-      ok.value = 'Успех';
-    }
+    if (Boolean(error.value)) {
+      message.value = error.value;
+    return ;
+    } 
+    message.value = ok.value;
+}
 
 
 
@@ -112,15 +63,25 @@ function makeUser() {
     <h3>
   <i>Регистрация</i>
 </h3>
+
+
+<form @submit.prevent="makeUser()">
+
 <input type="text" placeholder="Имя" className="block" v-model="userName">
 <input type="text" placeholder="Фамилия" className="block" v-model="userFamily">
 <input type="email" placeholder="Email" className="block" v-model="userEmail">
 <input type="password" placeholder="Пароль" className="block" v-model="userPass">
-<button @click="makeUser()">Создать аккаунт</button>
-<p class="error">{{ error }}</p>
-<p class="ok">{{ ok }}</p>  
+
+<button>Создать аккаунт</button>
+</form>
+
+<p class="ok" v-if="message == ok">{{ message }}</p>
+<p class="error" v-else >{{ message }}</p>
+
   </div>
-  <button type="button" @click="showUser()">push</button>
+
+  <button @click="showUser()">push</button>
+
 
   <div class= "userCenter">
     <div  v-for="(item, index) in users" :key='index'>
