@@ -137,6 +137,7 @@ p {
   margin: 10px auto;
 }
 .blockCenter {
+  text-align: center;
   margin: 10px auto;
 }
 </style>
