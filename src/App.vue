@@ -51,14 +51,15 @@
 //     }
 //   }
 // }
+import {ref} from 'vue'
 
-let ok = '';
-let error = '';
-let errorPush = '';
-let userName = '';
-let userFamily = '';
-let userEmail = '';
-let userPass = '';
+let ok = ref('');
+let error = ref('');
+let errorPush = ref('');
+let userName = ref('');
+let userFamily = ref('');
+let userEmail = ref('');
+let userPass = ref('');
 let users = [];
 
 function makeUser() {
@@ -132,7 +133,8 @@ function makeUser() {
   </div>
 
 <div class="blockCenter">
-<button @click="tester(ok)">test</button>
+<button @click="tester(userName)">test</button>
+<p>({{ userName }})</p>
 </div>
 
 </template>
