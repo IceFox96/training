@@ -60,43 +60,43 @@ let userName = ref('');
 let userFamily = ref('');
 let userEmail = ref('');
 let userPass = ref('');
-let users = [];
+let users = ref([]);
 
 function makeUser() {
-      if (userName == '') {
-        error = 'Нет Имени';
-         ok = '';   
+      if (userName.value == '') {
+        error.value = 'Нет Имени';
+         ok.value = '';   
         return
-      } else if (userFamily == '') {
-        error = 'Нет Фамилии';
-        ok = '';
+      } else if (userFamily.value == '') {
+        error.value = 'Нет Фамилии';
+        ok.value = '';
         return
-      } else if (userEmail == '') {
-        error = 'Нет Email';
-        ok = '';
+      } else if (userEmail.value == '') {
+        error.value = 'Нет Email';
+        ok.value = '';
         return
-      } else  if(userPass == '') {
-        error = 'Нет пароля';
-        ok = '';
+      } else  if(userPass.value == '') {
+        error.value = 'Нет пароля';
+        ok.value = '';
         return
       } 
-      error = '';
-      ok = 'Успех';
+      error.value = '';
+      ok.value = 'Успех';
     }
 
 
 
    function showUser() {
-      if (ok == '') {
+      if (ok.value == '') {
         alert('Создайте пользователя');
         return
       }
-      errorPush = '';
-      users.push ({
-        name: userName,
-        family: userFamily,
-        email: userEmail,
-        pass: userPass
+      errorPush.value = '';
+      users.value.push ({
+        name: userName.value,
+        family: userFamily.value,
+        email: userEmail.value,
+        pass: userPass.value
       })
     };
 
@@ -122,8 +122,8 @@ function makeUser() {
   </div>
   <button type="button" @click="showUser()">push</button>
 
-  <div class="blockCenter">
-    <div class="blockCenter" v-for="(item, index) in users" :key='index'>
+  <div class= "userCenter">
+    <div  v-for="(item, index) in users" :key='index'>
       <div class="userShow">
         <h3>{{ item.name }}</h3>
         <h4>{{ item.family }}</h4>
@@ -132,10 +132,6 @@ function makeUser() {
     </div>
   </div>
 
-<div class="blockCenter">
-<button @click="tester(userName)">test</button>
-<p>({{ userName }})</p>
-</div>
 
 </template>
 
@@ -195,6 +191,10 @@ p {
 }
 .blockCenter {
   text-align: center;
+  margin: 10px auto;
+}
+
+.userCenter {
   margin: 10px auto;
 }
 </style>
