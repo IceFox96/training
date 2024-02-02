@@ -1,56 +1,109 @@
-<script>
-export default {
-  data () {
-    return {
-      ok: '',
-      error: '',
-      errorPush: '',
-      userName: '',
-      userFamily: '',
-      userEmail: '',
-      userPass: '',
-      users: []
-    }
-  },
+<script setup>
+// export default {
+//   data () {
+//     return {
+//       ok: '',
+//       error: '',
+//       errorPush: '',
+//       userName: '',
+//       userFamily: '',
+//       userEmail: '',
+//       userPass: '',
+//       users: []
+//     }
+//   },
 
-  methods: {
-    makeUser() {
-      if (this.userName == '') {
-        this.error = 'Нет Имени';
-     this.ok = '';   
+//   methods: {
+//     makeUser() {
+//       if (this.userName == '') {
+//         this.error = 'Нет Имени';
+//      this.ok = '';   
+//         return
+//       } else if (this.userFamily == '') {
+//         this.error = 'Нет Фамилии';
+//         this.ok = '';
+//         return
+//       } else if (this.userEmail == '') {
+//         this.error = 'Нет Email';
+//         this.ok = '';
+//         return
+//       } else  if(this.userPass == '') {
+//         this.error = 'Нет пароля';
+//         this.ok = '';
+//         return
+//       } 
+//       this.error = '';
+//       this.ok = 'Успех';
+//     },
+
+//     showUser() {
+//       if (this.ok == '') {
+//         alert('Создайте пользователя');
+//         return
+//       }
+//       this.errorPush = '';
+//       this.users.push ({
+//         name: this.userName,
+//         family: this.userFamily,
+//         email: this.userEmail,
+//         pass: this.userPass
+//       })
+//     }
+//   }
+// }
+
+let ok = '';
+let error = '';
+let errorPush = '';
+let userName = '';
+let userFamily = '';
+let userEmail = '';
+let userPass = '';
+let users = [];
+
+function makeUser() {
+      if (userName == '') {
+        error = 'Нет Имени';
+         ok = '';   
         return
-      } else if (this.userFamily == '') {
-        this.error = 'Нет Фамилии';
-        this.ok = '';
+      } else if (userFamily == '') {
+        error = 'Нет Фамилии';
+        ok = '';
         return
-      } else if (this.userEmail == '') {
-        this.error = 'Нет Email';
-        this.ok = '';
+      } else if (userEmail == '') {
+        error = 'Нет Email';
+        ok = '';
         return
-      } else  if(this.userPass == '') {
-        this.error = 'Нет пароля';
-        this.ok = '';
+      } else  if(userPass == '') {
+        error = 'Нет пароля';
+        ok = '';
         return
       } 
-      this.error = '';
-      this.ok = 'Успех';
-    },
+      error = '';
+      ok = 'Успех';
+    }
 
-    showUser() {
-      if (this.ok == '') {
+
+
+   function showUser() {
+      if (ok == '') {
         alert('Создайте пользователя');
         return
       }
-      this.errorPush = '';
-      this.users.push ({
-        name: this.userName,
-        family: this.userFamily,
-        email: this.userEmail,
-        pass: this.userPass
+      errorPush = '';
+      users.push ({
+        name: userName,
+        family: userFamily,
+        email: userEmail,
+        pass: userPass
       })
+    };
+
+   function tester(data) {
+      alert(data);
     }
-  }
-}
+
+
 </script>
 
 <template>
@@ -63,8 +116,8 @@ export default {
 <input type="email" placeholder="Email" className="block" v-model="userEmail">
 <input type="password" placeholder="Пароль" className="block" v-model="userPass">
 <button @click="makeUser()">Создать аккаунт</button>
-<p className="error">{{ error }}</p>
-<p className="ok">{{ ok }}</p>  
+<p class="error">{{ error }}</p>
+<p class="ok">{{ ok }}</p>  
   </div>
   <button type="button" @click="showUser()">push</button>
 
@@ -78,7 +131,9 @@ export default {
     </div>
   </div>
 
-
+<div class="blockCenter">
+<button @click="tester(ok)">test</button>
+</div>
 
 </template>
 
