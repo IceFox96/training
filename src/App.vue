@@ -1,6 +1,9 @@
 <script setup>
 
-import {computed, ref} from 'vue'
+import {computed, ref} from 'vue' 
+import {useVuelidate} from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators';
+
 
 const errorPush = ref('');
 const userName = ref('');
