@@ -5,6 +5,8 @@ import {useVuelidate} from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators';
 
 
+
+
 const errorPush = ref('');
 const userName = ref('');
 const userFamily = ref('');
@@ -26,9 +28,23 @@ const error = computed(() => {
     default: 
     return '';
   }
-})
+});
 
 const ok = computed(() => (error.value == '' ? 'Успех' : '' ));
+
+function validations() {
+return {userName: { required },
+  userFamily: { required },
+  userPass: { required },
+  userEmail: { required, email }
+}}
+
+
+function setup () {
+    return { v$: useVuelidate() }
+  }
+
+
 
 function makeUser() {
     if (Boolean(error.value)) {
