@@ -5,8 +5,6 @@ import {useVuelidate} from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators';
 
 
-
-
 const errorPush = ref('');
 const userName = ref('');
 const userFamily = ref('');
@@ -14,6 +12,7 @@ const userEmail = ref('');
 const userPass = ref('');
 const users = ref([]);
 const message = ref('');
+const v$ = useVuelidate();
 
 const error = computed(() => {
   switch ('') {
@@ -40,18 +39,14 @@ return {userName: { required },
 }}
 
 
-function setup () {
-    return { v$: useVuelidate() }
-  }
 
 
 
 function makeUser() {
-    if (Boolean(error.value)) {
-      message.value = error.value;
-    return ;
-    } 
-    message.value = ok.value;
+v$.validate()
+if (!v$.error.value) {
+  alert('Успех')
+} else {alert('Ошибка')}
 }
 
 
@@ -78,6 +73,8 @@ function makeUser() {
 </script>
 
 <template>
+
+  
   <div class="center">
     <h3>
   <i>Регистрация</i>
