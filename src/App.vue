@@ -30,17 +30,12 @@ const userPass = ref('');
 const users = ref([]);
 const message = ref('');
 
-
 const v$ = useVuelidate(rules, {
-  userName: userName,
-  userFamily: userFamily,
-  userEmail: userEmail,
-  userPass: userPass
+  userName,
+  userFamily,
+  userEmail,
+  userPass
 });
-
-const ok = computed(() => (!v$.value.$invalid ? 'Успех' : '' ));
-
-
 
 
 
@@ -51,6 +46,7 @@ function makeUser() {
 
 
   if (v$.value.$invalid) {
+    console.log('Error')
     return
   }
 
@@ -79,10 +75,6 @@ function makeUser() {
 
    v$.value.$reset();
  };
-
- function tester(data) {
-    alert(data);
-  }
 
 
 </script>
