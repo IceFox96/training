@@ -1,9 +1,26 @@
 <script setup>
 
-import {computed, ref} from 'vue' 
-import {useVuelidate} from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators';
+import { computed, ref } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, helpers } from '@vuelidate/validators';
 
+const rules = computed(() => {
+  return {
+    userName: {
+      required: helpers.withMessage('Нет имени', required)
+    },
+    userFamily: {
+      required: helpers.withMessage('Нет фамилии', required)
+    },
+    userPass: {
+      required: helpers.withMessage('Нет пароля', required)
+    },
+    userEmail: {
+      required: helpers.withMessage('Нет Email', required),
+      email: helpers.withMessage('Email не действителен', email)
+    }
+  }
+})
 
 const errorPush = ref('');
 const userName = ref('');
@@ -12,95 +29,89 @@ const userEmail = ref('');
 const userPass = ref('');
 const users = ref([]);
 const message = ref('');
-const v$ = useVuelidate();
 
-const error = computed(() => {
-  switch ('') {
-    case userName.value: 
-    return 'Нет имени';
-    case userFamily.value:
-      return 'Нет фамилии';
-    case userEmail.value:
-      return 'Нет Email'
-    case userPass.value:
-      return 'Нет пароля'
-    default: 
-    return '';
-  }
+
+const v$ = useVuelidate(rules, {
+  userName: userName,
+  userFamily: userFamily,
+  userEmail: userEmail,
+  userPass: userPass
 });
 
-const ok = computed(() => (error.value == '' ? 'Успех' : '' ));
+const ok = computed(() => (!v$.value.$invalid ? 'Успех' : '' ));
 
-function validations() {
-return {userName: { required },
-  userFamily: { required },
-  userPass: { required },
-  userEmail: { required, email }
-}}
+
 
 
 
 
 
 function makeUser() {
-v$.validate()
-if (!v$.error.value) {
-  alert('Успех')
-} else {alert('Ошибка')}
+  v$.value.$touch();
+
+
+  if (v$.value.$invalid) {
+    return
+  }
+
+  console.log('Успех')
+  showUser()
 }
 
 
 
-   function showUser() {
-      if (ok.value == '') {
-        alert('Создайте пользователя');
-        return
-      }
-      errorPush.value = '';
-      users.value.push ({
-        name: userName.value,
-        family: userFamily.value,
-        email: userEmail.value,
-        pass: userPass.value
-      })
-    };
-
-   function tester(data) {
-      alert(data);
+ function showUser() {
+    if (v$.value.$invalid) {
+      alert('Создайте пользователя');
+      return
     }
+
+    users.value.push ({
+      name: userName.value,
+      family: userFamily.value,
+      email: userEmail.value,
+      pass: userPass.value
+    })
+   userName.value = '';
+   userFamily.value = '';
+   userEmail.value = '';
+   userPass.value = '';
+
+   v$.value.$reset();
+ };
+
+ function tester(data) {
+    alert(data);
+  }
 
 
 </script>
 
 <template>
 
-  
-  <div class="center">
-    <h3>
-  <i>Регистрация</i>
-</h3>
+
+<div class="center">
+  <h3>
+    <i>Регистрация</i>
+  </h3>
 
 
-<form @submit.prevent="makeUser()">
+  <form @submit.prevent="makeUser()">
 
-<input type="text" placeholder="Имя" className="block" v-model="userName">
-<input type="text" placeholder="Фамилия" className="block" v-model="userFamily">
-<input type="email" placeholder="Email" className="block" v-model="userEmail">
-<input type="password" placeholder="Пароль" className="block" v-model="userPass">
+    <input type="text" placeholder="Имя" className="block" v-model="userName" @input="v$.userName.$reset" @blur="v$.userName.$touch" />
+      <span>{{ v$.userName.$errors[0]?.$message }}</span>
+    <input type="text" placeholder="Фамилия" className="block" v-model="userFamily" @input="v$.userFamily.$reset" @blur="v$.userFamily.$touch"/>
+      <span>{{ v$.userFamily.$errors[0]?.$message }}</span>
+    <input type="email" placeholder="Email" className="block" v-model="userEmail" @input="v$.userEmail.$reset" @blur="v$.userEmail.$touch"/>
+      <span>{{ v$.userEmail.$errors[0]?.$message }}</span>
+    <input type="password" placeholder="Пароль" className="block" v-model="userPass" @input="v$.userPass.$reset" @blur="v$.userPass.$touch"/>
+      <span>{{ v$.userPass.$errors[0]?.$message }}</span>
 
-<button>Создать аккаунт</button>
-</form>
-
-<p class="ok" v-if="message == ok">{{ message }}</p>
-<p class="error" v-else >{{ message }}</p>
-
-  </div>
-
-  <button @click="showUser()">push</button>
-
+    <button>Создать аккаунт</button>
+  </form>
 
   <div class= "userCenter">
-    <div  v-for="(item, index) in users" :key='index'>
+    <div  v-for="(item, index) in users" :key="index">
       <div class="userShow">
         <h3>{{ item.name }}</h3>
         <h4>{{ item.family }}</h4>
@@ -109,7 +120,7 @@ if (!v$.error.value) {
     </div>
   </div>
 
-
+</div>
 </template>
 
 <style scoped>
